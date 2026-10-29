@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="zh-CN">
 <head>
@@ -240,14 +241,14 @@
         <strong>4</strong>
         <span>点击查看全部任务</span>
       </button>
-      <button class="metric metric-doing" type="button" data-filter="doing"><span>🔄 执行中</span><b>2</b></button><button class="metric metric-review" type="button" data-filter="review"><span>⏳ 待验收</span><b>0</b></button><button class="metric metric-rework" type="button" data-filter="rework"><span>🔁 返工中</span><b>0</b></button><button class="metric metric-done" type="button" data-filter="done"><span>✅ 已完成</span><b>2</b></button><button class="metric metric-blocked" type="button" data-filter="blocked"><span>⛔ 阻塞</span><b>0</b></button><button class="metric metric-decision" type="button" data-filter="decision"><span>👉 待总裁决定</span><b>0</b></button>
+      <button class="metric metric-doing" type="button" data-filter="doing"><span>🔄 执行中</span><b>0</b></button><button class="metric metric-review" type="button" data-filter="review"><span>⏳ 待验收</span><b>0</b></button><button class="metric metric-rework" type="button" data-filter="rework"><span>🔁 返工中</span><b>0</b></button><button class="metric metric-done" type="button" data-filter="done"><span>✅ 已完成</span><b>4</b></button><button class="metric metric-blocked" type="button" data-filter="blocked"><span>⛔ 阻塞</span><b>0</b></button><button class="metric metric-decision" type="button" data-filter="decision"><span>👉 待总裁决定</span><b>0</b></button>
     </section>
 
     <div class="content-grid">
       <section>
         <div class="toolbar">
           <input class="search" id="search" type="search" placeholder="🔎 搜索任务、编号或负责人" aria-label="搜索任务">
-          <span class="sync">🔄 数据更新：2026-10-29 18:37</span>
+          <span class="sync">🔄 数据更新：2026-10-29 19:20</span>
         </div>
         <nav class="filters" aria-label="任务状态筛选"><button type="button" data-filter="all" class="filter active">全部</button><button type="button" data-filter="doing" class="filter">🔄 执行中</button><button type="button" data-filter="review" class="filter">⏳ 待验收</button><button type="button" data-filter="rework" class="filter">🔁 返工中</button><button type="button" data-filter="decision" class="filter">👉 待总裁决定</button><button type="button" data-filter="blocked" class="filter">⛔ 阻塞</button><button type="button" data-filter="done" class="filter">✅ 已完成</button></nav>
         <div class="board-heading">
@@ -258,16 +259,16 @@
           <span class="visible-count" id="visibleCount">显示 4 张</span>
         </div>
         <div class="task-list" id="taskList">
-    <article class="task-card" data-status="doing"
-      data-search="t-20261029-01 前鼻音公开课重做 课件制作部项目经理 依据全部历史评课、10 月 8 日拼音教研、教学设计与指导、电子课本和课件踩坑，重做可直接上课的前鼻音公开课资料包。 完成 v8.0 课件、教学流程与独立验收">
+    <article class="task-card" data-status="done"
+      data-search="t-20261029-01 前鼻音公开课重做 课件制作部项目经理 依据历史评课、拼音教研、教学设计与指导、电子课本和课件踩坑，完成可直接上课的前鼻音公开课 v8.0 资料包，共 25 页 67 步。 总裁真实课堂试讲与最终验收">
       <span class="paper-tape" aria-hidden="true"></span>
       <button class="task-head" type="button" aria-expanded="false" aria-controls="task-0">
         <span class="task-topline">
-          <span class="status-badge status-doing">🔄 执行中</span>
+          <span class="status-badge status-done">✅ 已完成</span>
           <span class="eyebrow">T-20261029-01 </span>
         </span>
         <strong class="task-title">前鼻音公开课重做</strong>
-        <span class="task-summary">依据全部历史评课、10 月 8 日拼音教研、教学设计与指导、电子课本和课件踩坑，重做可直接上课的前鼻音公开课资料包。</span>
+        <span class="task-summary">依据历史评课、拼音教研、教学设计与指导、电子课本和课件踩坑，完成可直接上课的前鼻音公开课 V8.0 资料包，共 25 页 67 步。</span>
         <span class="expand-label">查看分工 <i class="chevron" aria-hidden="true">⌄</i></span>
       </button>
       <div class="paper-rule" aria-hidden="true"></div>
@@ -275,13 +276,13 @@
         <span><small>👤 负责人</small><b>课件制作部项目经理</b></span>
         <span><small>📅 期限</small><b>2026-10-29</b></span>
       </div>
-      <div class="task-next"><b>👉 下一步</b><span>完成 V8.0 课件、教学流程与独立验收</span></div>
+      <div class="task-next"><b>👉 下一步</b><span>总裁真实课堂试讲与最终验收</span></div>
       
       <div class="task-detail" id="task-0" hidden>
         <div class="detail-grid">
           <section>
             <h3>🧭 进度</h3>
-            <ol class="timeline"><li class="milestone done"><span class="milestone-dot"></span><span>锁定评课、教研、教材和教学设计依据</span><small>✅ 已完成</small></li><li class="milestone done"><span class="milestone-dot"></span><span>建立本次验收基线与教学流程</span><small>✅ 已完成</small></li><li class="milestone doing"><span class="milestone-dot"></span><span>生成 V8.0 课件和课堂话术对应表</span><small>🔄 进行中</small></li><li class="milestone todo"><span class="milestone-dot"></span><span>独立验收并正式交付</span><small>○ 未开始</small></li></ol>
+            <ol class="timeline"><li class="milestone done"><span class="milestone-dot"></span><span>锁定评课、教研、教材和教学设计依据</span><small>✅ 已完成</small></li><li class="milestone done"><span class="milestone-dot"></span><span>建立本次验收基线与教学流程</span><small>✅ 已完成</small></li><li class="milestone done"><span class="milestone-dot"></span><span>生成 V8.0 课件和课堂话术对应表</span><small>✅ 已完成</small></li><li class="milestone done"><span class="milestone-dot"></span><span>独立验收并正式交付</span><small>✅ 已完成</small></li></ol>
           </section>
           <section>
             <h3>👥 分工</h3>
@@ -290,21 +291,21 @@
         </div>
         <section class="versions-block">
           <h3>🏷️ 版本</h3>
-          <div class="versions"><span class="version"><b>V7.0</b> 上一版小凤原 PPT 48 页转制版</span><span class="version"><b>V8.0</b> 当前重做目标</span></div>
+          <div class="versions"><span class="version"><b>V7.0</b> 上一版小凤原 PPT 48 页转制版</span><span class="version"><b>V8.0</b> 当前交付版；P0/P1/P2 均为 0</span></div>
         </section>
       </div>
     </article>
     
-    <article class="task-card" data-status="doing"
-      data-search="t-20261029-02 总裁任务工作台（在线版） 总裁办产品经理 汇总总裁办全部任务，在有固定网址的网页中查看进行中、待验收、已完成、返工、阻塞和待总裁决定。 生成本地页面并完成手机与桌面验收">
+    <article class="task-card" data-status="done"
+      data-search="t-20261029-02 总裁任务工作台（在线版） 总裁办产品经理 总裁办任务已集中到固定网址，以一张张工单便签展示进行中、待验收、已完成、返工、阻塞和待总裁决定。 在 iphone safari 添加到主屏幕">
       <span class="paper-tape" aria-hidden="true"></span>
       <button class="task-head" type="button" aria-expanded="false" aria-controls="task-1">
         <span class="task-topline">
-          <span class="status-badge status-doing">🔄 执行中</span>
+          <span class="status-badge status-done">✅ 已完成</span>
           <span class="eyebrow">T-20261029-02 </span>
         </span>
         <strong class="task-title">总裁任务工作台（在线版）</strong>
-        <span class="task-summary">汇总总裁办全部任务，在有固定网址的网页中查看进行中、待验收、已完成、返工、阻塞和待总裁决定。</span>
+        <span class="task-summary">总裁办任务已集中到固定网址，以一张张工单便签展示进行中、待验收、已完成、返工、阻塞和待总裁决定。</span>
         <span class="expand-label">查看分工 <i class="chevron" aria-hidden="true">⌄</i></span>
       </button>
       <div class="paper-rule" aria-hidden="true"></div>
@@ -312,13 +313,13 @@
         <span><small>👤 负责人</small><b>总裁办产品经理</b></span>
         <span><small>📅 期限</small><b>2026-10-29</b></span>
       </div>
-      <div class="task-next"><b>👉 下一步</b><span>生成本地页面并完成手机与桌面验收</span></div>
+      <div class="task-next"><b>👉 下一步</b><span>在 iPhone Safari 添加到主屏幕</span></div>
       
       <div class="task-detail" id="task-1" hidden>
         <div class="detail-grid">
           <section>
             <h3>🧭 进度</h3>
-            <ol class="timeline"><li class="milestone done"><span class="milestone-dot"></span><span>确认在线公开只读与手机访问方案</span><small>✅ 已完成</small></li><li class="milestone doing"><span class="milestone-dot"></span><span>建立任务总账与本地网页</span><small>🔄 进行中</small></li><li class="milestone todo"><span class="milestone-dot"></span><span>独立验收</span><small>○ 未开始</small></li><li class="milestone todo"><span class="milestone-dot"></span><span>发布固定网址</span><small>○ 未开始</small></li></ol>
+            <ol class="timeline"><li class="milestone done"><span class="milestone-dot"></span><span>确认在线公开只读与手机访问方案</span><small>✅ 已完成</small></li><li class="milestone done"><span class="milestone-dot"></span><span>建立任务总账与本地网页</span><small>✅ 已完成</small></li><li class="milestone done"><span class="milestone-dot"></span><span>独立验收</span><small>✅ 已完成</small></li><li class="milestone done"><span class="milestone-dot"></span><span>发布固定网址</span><small>✅ 已完成</small></li></ol>
           </section>
           <section>
             <h3>👥 分工</h3>
@@ -327,7 +328,7 @@
         </div>
         <section class="versions-block">
           <h3>🏷️ 版本</h3>
-          <div class="versions"><span class="version"><b>V1.0</b> 首个在线任务工作台</span></div>
+          <div class="versions"><span class="version"><b>V1.0</b> 固定网址：https://kitty197831578-droid.github.io/ceo-task-dashboard/</span></div>
         </section>
       </div>
     </article>
