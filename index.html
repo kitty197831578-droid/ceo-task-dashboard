@@ -1,0 +1,458 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#182235">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="总裁工作台">
+  <meta name="description" content="总裁办在线任务工作台">
+  <title>总裁任务工作台</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧾</text></svg>">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #101827;
+      --panel: rgba(23, 35, 54, .88);
+      --panel-2: #1b2a41;
+      --line: rgba(160, 184, 221, .18);
+      --text: #f4f7fc;
+      --muted: #9eb0c8;
+      --blue: #69a8ff;
+      --cyan: #6ed6e8;
+      --green: #72d5a0;
+      --amber: #ffc56d;
+      --red: #ff8585;
+      --violet: #c4a1ff;
+      --radius: 20px;
+      --shadow: 0 18px 48px rgba(0,0,0,.28);
+    }
+    * { box-sizing: border-box; }
+    html { background: var(--bg); }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 8% 0%, rgba(83,126,210,.2), transparent 35rem),
+        radial-gradient(circle at 92% 12%, rgba(56,190,165,.12), transparent 30rem),
+        var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+      line-height: 1.55;
+    }
+    button, input { font: inherit; }
+    button { color: inherit; }
+    .shell { width: min(1180px, 100%); margin: 0 auto; padding: max(20px, env(safe-area-inset-top)) 18px 48px; }
+    .topbar { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; padding: 14px 2px 24px; }
+    .brand { display: flex; align-items: center; gap: 13px; }
+    .brand-icon {
+      width: 48px; height: 48px; display: grid; place-items: center; border-radius: 15px;
+      background: linear-gradient(145deg, #3163b6, #67b8dd); box-shadow: 0 8px 26px rgba(62,129,226,.28);
+      font-size: 26px;
+    }
+    h1 { margin: 0; font-size: clamp(24px, 5vw, 36px); letter-spacing: -.04em; }
+    .subtitle { margin: 3px 0 0; color: var(--muted); font-size: 14px; }
+    .privacy-pill {
+      border: 1px solid rgba(114,213,160,.24); color: #c9f8dc; background: rgba(114,213,160,.08);
+      border-radius: 999px; padding: 8px 12px; font-size: 13px; white-space: nowrap;
+    }
+    .hero {
+      display: grid; grid-template-columns: 1.2fr repeat(3, minmax(104px, .58fr));
+      gap: 12px; margin-bottom: 18px;
+    }
+    .hero-main {
+      min-height: 142px; border-radius: var(--radius); padding: 24px;
+      background: linear-gradient(135deg, rgba(37,72,122,.94), rgba(24,45,73,.92));
+      border: 1px solid rgba(125,173,239,.2); box-shadow: var(--shadow);
+      display: flex; flex-direction: column; justify-content: space-between;
+    }
+    .hero-main strong { font-size: clamp(38px, 8vw, 68px); line-height: 1; }
+    .hero-main span { color: #c8d8ed; }
+    .metric {
+      min-height: 142px; border: 1px solid var(--line); border-radius: var(--radius); padding: 16px;
+      background: var(--panel); box-shadow: var(--shadow); text-align: left; cursor: pointer;
+      display: flex; flex-direction: column; justify-content: space-between; transition: transform .16s, border-color .16s;
+    }
+    .metric:hover { transform: translateY(-2px); border-color: rgba(105,168,255,.45); }
+    .metric span { color: var(--muted); font-size: 13px; }
+    .metric b { font-size: 34px; }
+    .metric-doing b { color: var(--blue); }
+    .metric-review b { color: var(--amber); }
+    .metric-done b { color: var(--green); }
+    .content-grid { min-width: 0; }
+    .content-grid > * { min-width: 0; }
+    .toolbar {
+      position: sticky; top: 0; z-index: 10; display: grid; grid-template-columns: 1fr auto; gap: 12px;
+      padding: 12px; border: 1px solid var(--line); border-radius: var(--radius);
+      background: rgba(16,24,39,.88); backdrop-filter: blur(18px); box-shadow: 0 8px 30px rgba(0,0,0,.2);
+    }
+    .search {
+      width: 100%; border: 1px solid var(--line); border-radius: 12px; padding: 11px 13px;
+      color: var(--text); background: rgba(255,255,255,.045); outline: none;
+    }
+    .search:focus { border-color: var(--blue); }
+    .sync { color: var(--muted); font-size: 12px; align-self: center; white-space: nowrap; }
+    .filters { width: 100%; max-width: 100%; display: flex; gap: 8px; overflow-x: auto; padding: 12px 2px 14px; scrollbar-width: none; }
+    .filters::-webkit-scrollbar { display: none; }
+    .filter {
+      border: 1px solid var(--line); background: rgba(255,255,255,.035); color: var(--muted);
+      border-radius: 999px; padding: 8px 12px; cursor: pointer; white-space: nowrap;
+    }
+    .filter.active { color: #fff; border-color: rgba(105,168,255,.55); background: rgba(105,168,255,.17); }
+    .board-heading { display: flex; justify-content: space-between; align-items: end; gap: 16px; padding: 12px 2px 10px; }
+    .board-heading h2 { margin: 0; font-size: 18px; }
+    .board-heading p { margin: 3px 0 0; color: var(--muted); font-size: 13px; }
+    .visible-count { color: var(--muted); font-size: 12px; white-space: nowrap; }
+    .task-list { display: grid; grid-template-columns: repeat(2, minmax(280px, 1fr)); gap: 20px; align-items: start; }
+    .task-card {
+      --paper: #eef4fb;
+      --paper-edge: #cfdaea;
+      --paper-ink: #1f3550;
+      --paper-muted: #607187;
+      --paper-accent: #4c82c3;
+      position: relative; overflow: visible; border-radius: 4px 18px 18px 18px;
+      color: var(--paper-ink); background:
+        linear-gradient(90deg, transparent 25px, rgba(224,98,98,.12) 26px, transparent 27px),
+        repeating-linear-gradient(180deg, transparent 0 31px, rgba(62,91,125,.09) 32px),
+        var(--paper);
+      border: 1px solid var(--paper-edge);
+      box-shadow: 0 20px 36px rgba(0,0,0,.28);
+      transform: rotate(-.25deg);
+      transition: transform .18s, box-shadow .18s;
+    }
+    .task-card:nth-child(even) { transform: rotate(.2deg); }
+    .task-card:hover { transform: translateY(-3px) rotate(0); box-shadow: 0 24px 42px rgba(0,0,0,.34); }
+    .task-card[data-status="doing"] { --paper: #eef4ff; --paper-edge: #c9d8ee; --paper-accent: #3d73b9; }
+    .task-card[data-status="review"] { --paper: #fff8e2; --paper-edge: #ead8a7; --paper-accent: #b57c16; }
+    .task-card[data-status="rework"] { --paper: #f4edff; --paper-edge: #d8c6ef; --paper-accent: #7951ab; }
+    .task-card[data-status="done"] { --paper: #ebf8ee; --paper-edge: #c3dfca; --paper-accent: #2f8a52; }
+    .task-card[data-status="blocked"] { --paper: #fff0ef; --paper-edge: #e8c5c2; --paper-accent: #b94c47; }
+    .task-card[data-status="decision"] { --paper: #fff3d8; --paper-edge: #e7ce98; --paper-accent: #b77a10; }
+    .paper-tape {
+      position: absolute; z-index: 3; top: -10px; left: 50%; width: 88px; height: 24px;
+      transform: translateX(-50%) rotate(-1.5deg); background: rgba(245,234,184,.78);
+      border: 1px solid rgba(151,127,61,.18); box-shadow: 0 2px 6px rgba(35,46,61,.12);
+    }
+    .task-head {
+      width: 100%; border: 0; background: transparent; padding: 25px 22px 12px; cursor: pointer;
+      display: grid; gap: 10px; text-align: left; color: var(--paper-ink);
+    }
+    .task-topline { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; }
+    .eyebrow { color: var(--paper-muted); font-size: 11px; letter-spacing: .08em; }
+    .task-title { font-size: clamp(20px, 3vw, 25px); line-height: 1.25; letter-spacing: -.025em; }
+    .task-summary { color: #4b5e73; font-size: 14px; line-height: 1.65; }
+    .status-badge { border-radius: 999px; padding: 5px 9px; font-size: 12px; font-weight: 700; white-space: nowrap; border: 1px solid currentColor; }
+    .status-doing { color: #245b9e; background: rgba(61,115,185,.09); }
+    .status-review { color: #8b5b08; background: rgba(181,124,22,.09); }
+    .status-rework { color: #664188; background: rgba(121,81,171,.09); }
+    .status-done { color: #276d44; background: rgba(47,138,82,.09); }
+    .status-blocked { color: #963a36; background: rgba(185,76,71,.09); }
+    .status-decision { color: #8d5e07; background: rgba(183,122,16,.1); }
+    .expand-label { display: flex; align-items: center; gap: 5px; color: var(--paper-accent); font-size: 12px; font-weight: 700; }
+    .chevron { font-style: normal; font-size: 17px; transition: transform .18s; }
+    .task-head[aria-expanded="true"] .chevron { transform: rotate(180deg); }
+    .legacy { margin-left: 7px; font-size: 10px; border: 1px solid rgba(57,78,103,.25); border-radius: 999px; padding: 2px 6px; }
+    .paper-rule { height: 1px; margin: 0 22px 13px; background: repeating-linear-gradient(90deg, var(--paper-edge) 0 5px, transparent 5px 9px); }
+    .task-quick { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 0 22px 13px; color: var(--paper-ink); font-size: 13px; }
+    .task-quick span { display: grid; gap: 1px; }
+    .task-quick small { color: var(--paper-muted); }
+    .task-quick b { font-size: 13px; }
+    .task-next {
+      margin: 0 22px 20px; padding: 12px 13px; display: grid; gap: 3px;
+      border-left: 4px solid var(--paper-accent); border-radius: 3px 10px 10px 3px;
+      background: rgba(255,255,255,.52); color: #31465e; font-size: 14px;
+    }
+    .task-next b { color: var(--paper-accent); font-size: 11px; letter-spacing: .04em; }
+    .decision-callout {
+      margin: 0 22px 18px; border: 1px solid rgba(183,122,16,.35); border-radius: 10px;
+      background: rgba(255,255,255,.55); padding: 11px 13px;
+    }
+    .decision-callout span { color: #8d5e07; font-weight: 800; }
+    .decision-callout p { margin: 4px 0 0; color: #5d4924; }
+    .task-detail { border-top: 1px dashed var(--paper-edge); padding: 18px 22px 22px; background: rgba(255,255,255,.3); }
+    .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+    .task-detail h3 { margin: 0 0 11px; font-size: 13px; color: var(--paper-ink); }
+    .timeline, .departments { list-style: none; padding: 0; margin: 0; display: grid; gap: 9px; }
+    .milestone { display: grid; grid-template-columns: 10px 1fr auto; gap: 9px; align-items: center; font-size: 13px; }
+    .milestone-dot { width: 8px; height: 8px; border-radius: 50%; background: #52647b; }
+    .milestone.done .milestone-dot { background: var(--green); }
+    .milestone.doing .milestone-dot { background: var(--blue); box-shadow: 0 0 0 4px rgba(105,168,255,.12); }
+    .milestone small { color: var(--muted); }
+    .departments li { position: relative; padding-left: 14px; color: #42566d; font-size: 13px; }
+    .departments li::before { content: "•"; position: absolute; left: 0; color: var(--paper-accent); }
+    .versions-block { margin-top: 18px; }
+    .versions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .version { border: 1px solid var(--paper-edge); border-radius: 10px; padding: 7px 10px; color: var(--paper-muted); font-size: 12px; background: rgba(255,255,255,.4); }
+    .version b { color: var(--paper-ink); margin-right: 5px; }
+    .empty { display: none; padding: 42px 18px; text-align: center; color: var(--muted); }
+    .empty.show { display: block; }
+    .muted { color: var(--muted); }
+    .footer { color: #75879e; font-size: 12px; padding: 24px 2px 0; }
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: repeat(3, 1fr); }
+      .hero-main { grid-column: 1 / -1; min-height: 116px; }
+      .metric { min-height: 100px; }
+      .task-list { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 620px) {
+      .shell { padding-left: 12px; padding-right: 12px; }
+      .topbar { padding-top: 6px; align-items: center; }
+      .brand-icon { width: 42px; height: 42px; }
+      .privacy-pill { font-size: 11px; padding: 6px 8px; }
+      .hero { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+      .hero-main { border-radius: 16px; padding: 20px; }
+      .metric { min-height: 88px; border-radius: 16px; padding: 13px; }
+      .metric b { font-size: 28px; }
+      .toolbar { grid-template-columns: 1fr; gap: 7px; border-radius: 16px; }
+      .sync { padding-left: 2px; }
+      .task-card { border-radius: 4px 16px 16px 16px; }
+      .task-head { padding: 24px 18px 11px; }
+      .task-title { font-size: 21px; }
+      .task-summary { font-size: 13px; }
+      .task-quick { padding: 0 18px 12px; gap: 8px; }
+      .task-next, .decision-callout { margin-left: 18px; margin-right: 18px; }
+      .paper-rule { margin-left: 18px; margin-right: 18px; }
+      .detail-grid { grid-template-columns: 1fr; }
+      .task-detail { padding: 16px 18px 20px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      * { scroll-behavior: auto !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-icon" aria-hidden="true">🧾</div>
+        <div>
+          <h1>总裁任务工作台</h1>
+          <p class="subtitle">全部任务 · 进度 · 验收 · 待决定</p>
+        </div>
+      </div>
+      <span class="privacy-pill">🔒 公开只读，只展示非敏感任务概况</span>
+    </header>
+
+    <section class="hero" aria-label="任务总览">
+      <button class="hero-main" type="button" data-filter="all">
+        <span>🧾 全部工单</span>
+        <strong>4</strong>
+        <span>点击查看全部任务</span>
+      </button>
+      <button class="metric metric-doing" type="button" data-filter="doing"><span>🔄 执行中</span><b>2</b></button><button class="metric metric-review" type="button" data-filter="review"><span>⏳ 待验收</span><b>0</b></button><button class="metric metric-rework" type="button" data-filter="rework"><span>🔁 返工中</span><b>0</b></button><button class="metric metric-done" type="button" data-filter="done"><span>✅ 已完成</span><b>2</b></button><button class="metric metric-blocked" type="button" data-filter="blocked"><span>⛔ 阻塞</span><b>0</b></button><button class="metric metric-decision" type="button" data-filter="decision"><span>👉 待总裁决定</span><b>0</b></button>
+    </section>
+
+    <div class="content-grid">
+      <section>
+        <div class="toolbar">
+          <input class="search" id="search" type="search" placeholder="🔎 搜索任务、编号或负责人" aria-label="搜索任务">
+          <span class="sync">🔄 数据更新：2026-10-29 18:37</span>
+        </div>
+        <nav class="filters" aria-label="任务状态筛选"><button type="button" data-filter="all" class="filter active">全部</button><button type="button" data-filter="doing" class="filter">🔄 执行中</button><button type="button" data-filter="review" class="filter">⏳ 待验收</button><button type="button" data-filter="rework" class="filter">🔁 返工中</button><button type="button" data-filter="decision" class="filter">👉 待总裁决定</button><button type="button" data-filter="blocked" class="filter">⛔ 阻塞</button><button type="button" data-filter="done" class="filter">✅ 已完成</button></nav>
+        <div class="board-heading">
+          <div>
+            <h2>🧾 工单便签墙</h2>
+            <p>一张便签就是一张工单，点开查看分工和进度</p>
+          </div>
+          <span class="visible-count" id="visibleCount">显示 4 张</span>
+        </div>
+        <div class="task-list" id="taskList">
+    <article class="task-card" data-status="doing"
+      data-search="t-20261029-01 前鼻音公开课重做 课件制作部项目经理 依据全部历史评课、10 月 8 日拼音教研、教学设计与指导、电子课本和课件踩坑，重做可直接上课的前鼻音公开课资料包。 完成 v8.0 课件、教学流程与独立验收">
+      <span class="paper-tape" aria-hidden="true"></span>
+      <button class="task-head" type="button" aria-expanded="false" aria-controls="task-0">
+        <span class="task-topline">
+          <span class="status-badge status-doing">🔄 执行中</span>
+          <span class="eyebrow">T-20261029-01 </span>
+        </span>
+        <strong class="task-title">前鼻音公开课重做</strong>
+        <span class="task-summary">依据全部历史评课、10 月 8 日拼音教研、教学设计与指导、电子课本和课件踩坑，重做可直接上课的前鼻音公开课资料包。</span>
+        <span class="expand-label">查看分工 <i class="chevron" aria-hidden="true">⌄</i></span>
+      </button>
+      <div class="paper-rule" aria-hidden="true"></div>
+      <div class="task-quick">
+        <span><small>👤 负责人</small><b>课件制作部项目经理</b></span>
+        <span><small>📅 期限</small><b>2026-10-29</b></span>
+      </div>
+      <div class="task-next"><b>👉 下一步</b><span>完成 V8.0 课件、教学流程与独立验收</span></div>
+      
+      <div class="task-detail" id="task-0" hidden>
+        <div class="detail-grid">
+          <section>
+            <h3>🧭 进度</h3>
+            <ol class="timeline"><li class="milestone done"><span class="milestone-dot"></span><span>锁定评课、教研、教材和教学设计依据</span><small>✅ 已完成</small></li><li class="milestone done"><span class="milestone-dot"></span><span>建立本次验收基线与教学流程</span><small>✅ 已完成</small></li><li class="milestone doing"><span class="milestone-dot"></span><span>生成 V8.0 课件和课堂话术对应表</span><small>🔄 进行中</small></li><li class="milestone todo"><span class="milestone-dot"></span><span>独立验收并正式交付</span><small>○ 未开始</small></li></ol>
+          </section>
+          <section>
+            <h3>👥 分工</h3>
+            <ul class="departments"><li>教学研究部：核对评课、教研记录和课时边界</li><li>内容审核部：核对教材知识与课堂话术</li><li>课件制作部：重建动画并修复文字挤压</li><li>文档制作部：同步教案、一页纸和逐字稿</li><li>档案管理部：维护版本和项目记忆</li><li>质量验收部：独立执行双浏览器与版式验收</li></ul>
+          </section>
+        </div>
+        <section class="versions-block">
+          <h3>🏷️ 版本</h3>
+          <div class="versions"><span class="version"><b>V7.0</b> 上一版小凤原 PPT 48 页转制版</span><span class="version"><b>V8.0</b> 当前重做目标</span></div>
+        </section>
+      </div>
+    </article>
+    
+    <article class="task-card" data-status="doing"
+      data-search="t-20261029-02 总裁任务工作台（在线版） 总裁办产品经理 汇总总裁办全部任务，在有固定网址的网页中查看进行中、待验收、已完成、返工、阻塞和待总裁决定。 生成本地页面并完成手机与桌面验收">
+      <span class="paper-tape" aria-hidden="true"></span>
+      <button class="task-head" type="button" aria-expanded="false" aria-controls="task-1">
+        <span class="task-topline">
+          <span class="status-badge status-doing">🔄 执行中</span>
+          <span class="eyebrow">T-20261029-02 </span>
+        </span>
+        <strong class="task-title">总裁任务工作台（在线版）</strong>
+        <span class="task-summary">汇总总裁办全部任务，在有固定网址的网页中查看进行中、待验收、已完成、返工、阻塞和待总裁决定。</span>
+        <span class="expand-label">查看分工 <i class="chevron" aria-hidden="true">⌄</i></span>
+      </button>
+      <div class="paper-rule" aria-hidden="true"></div>
+      <div class="task-quick">
+        <span><small>👤 负责人</small><b>总裁办产品经理</b></span>
+        <span><small>📅 期限</small><b>2026-10-29</b></span>
+      </div>
+      <div class="task-next"><b>👉 下一步</b><span>生成本地页面并完成手机与桌面验收</span></div>
+      
+      <div class="task-detail" id="task-1" hidden>
+        <div class="detail-grid">
+          <section>
+            <h3>🧭 进度</h3>
+            <ol class="timeline"><li class="milestone done"><span class="milestone-dot"></span><span>确认在线公开只读与手机访问方案</span><small>✅ 已完成</small></li><li class="milestone doing"><span class="milestone-dot"></span><span>建立任务总账与本地网页</span><small>🔄 进行中</small></li><li class="milestone todo"><span class="milestone-dot"></span><span>独立验收</span><small>○ 未开始</small></li><li class="milestone todo"><span class="milestone-dot"></span><span>发布固定网址</span><small>○ 未开始</small></li></ol>
+          </section>
+          <section>
+            <h3>👥 分工</h3>
+            <ul class="departments"><li>总裁办产品经理：定义工作台范围和状态口径</li><li>档案管理部：维护唯一任务总账</li><li>文档制作部：生成响应式网页</li><li>质量验收部：检查任务数量、筛选、隐私和线上地址</li></ul>
+          </section>
+        </div>
+        <section class="versions-block">
+          <h3>🏷️ 版本</h3>
+          <div class="versions"><span class="version"><b>V1.0</b> 首个在线任务工作台</span></div>
+        </section>
+      </div>
+    </article>
+    
+    <article class="task-card" data-status="done"
+      data-search="sys-20261029-01 一人公司制度 v1.0 总裁办 固化唯一入口、工单先行、任务编号、中层责任、独立验收、经验来源、状态标记和唯一任务板。 按该制度运行每项新任务">
+      <span class="paper-tape" aria-hidden="true"></span>
+      <button class="task-head" type="button" aria-expanded="false" aria-controls="task-2">
+        <span class="task-topline">
+          <span class="status-badge status-done">✅ 已完成</span>
+          <span class="eyebrow">SYS-20261029-01 </span>
+        </span>
+        <strong class="task-title">一人公司制度 V1.0</strong>
+        <span class="task-summary">固化唯一入口、工单先行、任务编号、中层责任、独立验收、经验来源、状态标记和唯一任务板。</span>
+        <span class="expand-label">查看分工 <i class="chevron" aria-hidden="true">⌄</i></span>
+      </button>
+      <div class="paper-rule" aria-hidden="true"></div>
+      <div class="task-quick">
+        <span><small>👤 负责人</small><b>总裁办</b></span>
+        <span><small>📅 期限</small><b>2026-10-29</b></span>
+      </div>
+      <div class="task-next"><b>👉 下一步</b><span>按该制度运行每项新任务</span></div>
+      
+      <div class="task-detail" id="task-2" hidden>
+        <div class="detail-grid">
+          <section>
+            <h3>🧭 进度</h3>
+            <ol class="timeline"><li class="milestone done"><span class="milestone-dot"></span><span>写入全局规则和总裁办技能</span><small>✅ 已完成</small></li><li class="milestone done"><span class="milestone-dot"></span><span>建立正式制度与中层工作台账</span><small>✅ 已完成</small></li><li class="milestone done"><span class="milestone-dot"></span><span>完成一致性检查</span><small>✅ 已完成</small></li></ol>
+          </section>
+          <section>
+            <h3>👥 分工</h3>
+            <ul class="departments"><li>总裁办：制定和验收制度</li><li>档案管理部：维护制度、决策和台账</li></ul>
+          </section>
+        </div>
+        <section class="versions-block">
+          <h3>🏷️ 版本</h3>
+          <div class="versions"><span class="version"><b>V1.0</b> 当前生效</span></div>
+        </section>
+      </div>
+    </article>
+    
+    <article class="task-card" data-status="done"
+      data-search="t-001 总裁办轻量版试运行 项目统筹经理 验证单入口、中层拆解、专业执行和独立验收的轻量协作模式。 已由一人公司制度 v1.0 接续">
+      <span class="paper-tape" aria-hidden="true"></span>
+      <button class="task-head" type="button" aria-expanded="false" aria-controls="task-3">
+        <span class="task-topline">
+          <span class="status-badge status-done">✅ 已完成</span>
+          <span class="eyebrow">T-001 <span class="legacy">历史补录</span></span>
+        </span>
+        <strong class="task-title">总裁办轻量版试运行</strong>
+        <span class="task-summary">验证单入口、中层拆解、专业执行和独立验收的轻量协作模式。</span>
+        <span class="expand-label">查看分工 <i class="chevron" aria-hidden="true">⌄</i></span>
+      </button>
+      <div class="paper-rule" aria-hidden="true"></div>
+      <div class="task-quick">
+        <span><small>👤 负责人</small><b>项目统筹经理</b></span>
+        <span><small>📅 期限</small><b>2026-10-29</b></span>
+      </div>
+      <div class="task-next"><b>👉 下一步</b><span>已由一人公司制度 V1.0 接续</span></div>
+      
+      <div class="task-detail" id="task-3" hidden>
+        <div class="detail-grid">
+          <section>
+            <h3>🧭 进度</h3>
+            <ol class="timeline"><li class="milestone done"><span class="milestone-dot"></span><span>完成总裁办一页操作卡</span><small>✅ 已完成</small></li><li class="milestone done"><span class="milestone-dot"></span><span>独立复核通过</span><small>✅ 已完成</small></li><li class="milestone done"><span class="milestone-dot"></span><span>发现多层嵌套派工不稳定</span><small>✅ 已完成</small></li></ol>
+          </section>
+          <section>
+            <h3>👥 分工</h3>
+            <ul class="departments"><li>项目统筹经理：拆解和协调</li><li>文档执行：制作一页操作卡</li><li>独立验收：按标准复核</li></ul>
+          </section>
+        </div>
+        <section class="versions-block">
+          <h3>🏷️ 版本</h3>
+          <p class="muted">无版本记录</p>
+        </section>
+      </div>
+    </article>
+    </div>
+        <div class="empty" id="empty">没有符合当前筛选的任务</div>
+      </section>
+    </div>
+    <footer class="footer">
+      V1.0 · 本页面仅展示任务概况，不包含学生、成绩或账号信息
+    </footer>
+  </main>
+  <script>
+    const filterButtons = [...document.querySelectorAll('[data-filter]')];
+    const filterNav = [...document.querySelectorAll('.filters [data-filter]')];
+    const cards = [...document.querySelectorAll('.task-card')];
+    const search = document.getElementById('search');
+    const empty = document.getElementById('empty');
+    const visibleCount = document.getElementById('visibleCount');
+    let activeFilter = 'all';
+
+    function applyFilter() {
+      const query = search.value.trim().toLowerCase();
+      let visible = 0;
+      cards.forEach(card => {
+        const statusOK = activeFilter === 'all' || card.dataset.status === activeFilter;
+        const searchOK = !query || card.dataset.search.includes(query);
+        const show = statusOK && searchOK;
+        card.hidden = !show;
+        if (show) visible += 1;
+      });
+      empty.classList.toggle('show', visible === 0);
+      visibleCount.textContent = `显示 ${visible} 张`;
+      filterNav.forEach(button => button.classList.toggle('active', button.dataset.filter === activeFilter));
+    }
+
+    filterButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        activeFilter = button.dataset.filter;
+        applyFilter();
+        document.querySelector('.filters').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+    search.addEventListener('input', applyFilter);
+
+    document.querySelectorAll('.task-head').forEach(button => {
+      button.addEventListener('click', () => {
+        const expanded = button.getAttribute('aria-expanded') === 'true';
+        button.setAttribute('aria-expanded', String(!expanded));
+        document.getElementById(button.getAttribute('aria-controls')).hidden = expanded;
+      });
+    });
+  </script>
+</body>
+</html>
